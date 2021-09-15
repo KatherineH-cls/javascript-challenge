@@ -25,13 +25,10 @@ FillTable(tableData);
 var filter_button = d3.select("#filter-btn");
 var reset_button = d3.select("#reset-btn")
 
-// Select the form
-// var form = d3.select("form").selectAll("li");
-
 // Create event handlers 
 filter_button.on("click", runEnter);
 reset_button.on("click", runClear);
-// form.on("submit", runEnter);
+
 
 // Complete the event handler function for the Apply Filters button
 function runEnter() {
@@ -72,7 +69,7 @@ function runEnter() {
     console.log("no state filter");
   }
 
-  // filter by country
+    // filter by country
   if (d3.select("#country").property("value")) {
     console.log("there is a country filter")
     var country_inputValue = d3.select("#country").property("value").toLowerCase().substring(0, 2);
@@ -92,7 +89,6 @@ function runEnter() {
     console.log("no shape filter");
   }
 
-
   console.log(filteredData);
 
   // clear out the previous table
@@ -107,11 +103,10 @@ function runEnter() {
   else {
     // Fill the table with filtered data
     FillTable(filteredData);
-
   }
 };
 
-// Complete the event handler function for the Apply Filters button
+// Complete the event handler function for the Clear Filters button
 function runClear() {
   // clear out the previous table
   tbody.selectAll("tr").remove();
