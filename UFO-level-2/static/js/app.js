@@ -18,15 +18,17 @@ tableData.forEach((sighting) => {
 // Set up filtering of the table  
 // Select the button
 var filter_button = d3.select("#filter-btn");
+var reset_button = d3.select("#reset-btn")
 
 // Select the form
-var form = d3.select("form").selectAll("li");
+// var form = d3.select("form").selectAll("li");
 
 // Create event handlers 
 filter_button.on("click", runEnter);
+reset_button.on("click", runClear);
 // form.on("submit", runEnter);
 
-// Complete the event handler function for the form
+// Complete the event handler function for the Apply Filters button
 function runEnter() {
 
   // Prevent the page from refreshing
@@ -58,17 +60,17 @@ function runEnter() {
   // filter by state
   if (d3.select("#state").property("value")) {
     console.log("there is a state filter")
-    var state_inputValue = d3.select("#state").property("value").toLowerCase().substring(0,2);
+    var state_inputValue = d3.select("#state").property("value").toLowerCase().substring(0, 2);
     var filteredData = filteredData.filter(sighting => sighting.state === state_inputValue);
   }
   else {
     console.log("no state filter");
   }
-  
+
   // filter by country
   if (d3.select("#country").property("value")) {
     console.log("there is a country filter")
-    var country_inputValue = d3.select("#country").property("value").toLowerCase().substring(0,2);
+    var country_inputValue = d3.select("#country").property("value").toLowerCase().substring(0, 2);
     var filteredData = filteredData.filter(sighting => sighting.country === country_inputValue);
   }
   else {
@@ -78,7 +80,7 @@ function runEnter() {
   // filter by shape
   if (d3.select("#shape").property("value")) {
     console.log("there is a shape filter")
-    var shape_inputValue = d3.select("#shape").property("value");
+    var shape_inputValue = d3.select("#shape").property("value").toLowerCase();
     var filteredData = filteredData.filter(sighting => sighting.shape === shape_inputValue);
   }
   else {
@@ -107,6 +109,21 @@ function runEnter() {
         cell.text(value);
       });
     })
-    }
+  }
 };
 
+// Complete the event handler function for the Apply Filters button
+function runClear() {
+  // clear out the previous table
+  tbody.selectAll("tr").remove();
+  // Fill the table
+  // Add data from each element in data across a row
+  tableData.forEach((sighting) => {
+    var row = tbody.append("tr");
+    Object.entries(sighting).forEach(([key, value]) => {
+      var cell = row.append("td");
+      cell.text(value);
+    });
+  });
+
+}
