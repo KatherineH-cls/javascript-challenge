@@ -47,6 +47,7 @@ function runEnter() {
 
   // clear out the previous table
   //document.getElementsByTagName("tr")[2].remove();
+  d3.selectAll("tr").remove();
 
   // Fill the table with filtered data
   // Add data from each element in data across a row
