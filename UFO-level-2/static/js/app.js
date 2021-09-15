@@ -8,12 +8,12 @@ var tbody = d3.select("tbody");
 // Fill the table
 // Add data from each element in data across a row
 tableData.forEach((sighting) => {
-    var row = tbody.append("tr");
-    Object.entries(sighting).forEach(([key, value]) => {
-      var cell = row.append("td");
-      cell.text(value);
-    });
+  var row = tbody.append("tr");
+  Object.entries(sighting).forEach(([key, value]) => {
+    var cell = row.append("td");
+    cell.text(value);
   });
+});
 
 // Set up filtering of the table  
 // Select the button
@@ -22,90 +22,91 @@ var filter_button = d3.select("#filter-btn");
 // Select the form
 var form = d3.select("form").selectAll("li");
 
-
-
-
-//Create filtering function
-function UFOfilters(sighting){
-  
-}
-
 // Create event handlers 
 filter_button.on("click", runEnter);
-form.on("submit", runEnter);
+// form.on("submit", runEnter);
 
 // Complete the event handler function for the form
 function runEnter() {
 
   // Prevent the page from refreshing
   d3.event.preventDefault();
-  
 
-  // select filter criteria
-
+  // apply filters
   // filter by date
-  if (d3.select("#datetime").property("value") ){
+  if (d3.select("#datetime").property("value")) {
     console.log("there is a datetime filter")
     var date_inputValue = d3.select("#datetime").property("value");
-    var filteredData1 = tableData.filter(sighting => sighting.datetime === date_inputValue);
+    var filteredData = tableData.filter(sighting => sighting.datetime === date_inputValue);
   }
   else {
     console.log("no datetime filter");
-    var filteredData1 = tableData
+    // we still want a filteredData variable for the following code, even if no date filter entered
+    var filteredData = tableData
   }
 
   // filter by city
-  if (d3.select("#city").property("value") ){
+  if (d3.select("#city").property("value")) {
     console.log("there is a city filter")
-    var city_inputValue = d3.select("#city").property("value");
-    var filteredData2 = filteredData1.filter(sighting => sighting.city === city_inputValue);
+    var city_inputValue = d3.select("#city").property("value").toLowerCase();
+    var filteredData = filteredData.filter(sighting => sighting.city === city_inputValue);
   }
   else {
     console.log("no city filter");
-    var filteredData2 = filteredData1
+  }
+
+  // filter by state
+  if (d3.select("#state").property("value")) {
+    console.log("there is a state filter")
+    var state_inputValue = d3.select("#state").property("value").toLowerCase().substring(0,2);
+    var filteredData = filteredData.filter(sighting => sighting.state === state_inputValue);
+  }
+  else {
+    console.log("no state filter");
+  }
+  
+  // filter by country
+  if (d3.select("#country").property("value")) {
+    console.log("there is a country filter")
+    var country_inputValue = d3.select("#country").property("value").toLowerCase().substring(0,2);
+    var filteredData = filteredData.filter(sighting => sighting.country === country_inputValue);
+  }
+  else {
+    console.log("no country filter");
+  }
+
+  // filter by shape
+  if (d3.select("#shape").property("value")) {
+    console.log("there is a shape filter")
+    var shape_inputValue = d3.select("#shape").property("value");
+    var filteredData = filteredData.filter(sighting => sighting.shape === shape_inputValue);
+  }
+  else {
+    console.log("no shape filter");
   }
 
 
-  // if (d3.select("#city").empty === false){
-  //   var city_inputValue = d3.select("#city").property("value");
-  //   console.log(city_inputValue);
-  // }
-  // if (d3.select("#state").empty === false){
-  //   var state_inputValue = d3.select("#state").property("value");
-  //   console.log(state_inputValue);
-  // }
-  // if (d3.select("#country").empty === false){
-  //   var country_inputValue = d3.select("#country").property("value");
-  //   console.log(country_inputValue);
-  // }
-  // if (d3.select("#shape").empty === false){
-  //   var shape_inputValue = d3.select("#shape").property("value");
-  //   console.log(shape_inputValue);
-  // }
-
-  // Select the input element and get the raw HTML node
-  // var date_inputElement = d3.select("#datetime");
-
-  // Get the value property of the input element
-  // var date_inputValue = date_inputElement.property("value");
-
-  // console.log(date_inputValue);
-  //console.log(people);
-
-  
-  console.log(filteredData2);
+  console.log(filteredData);
 
   // clear out the previous table
   tbody.selectAll("tr").remove();
 
-  // Fill the table with filtered data
-  // Add data from each element in data across a row
-  filteredData2.forEach((sighting) => {
-        var row = tbody.append("tr");
-        Object.entries(sighting).forEach(([key, value]) => {
+  // put in a message if there are no sightings that match filter criteria
+  if (filteredData.length === 0) {
+    var row = tbody.append("tr");
+    var cell = row.append("td");
+    cell.text("No sightings match your criteria")
+  }
+  else {
+    // Fill the table with filtered data
+    // Add data from each element in data across a row
+    filteredData.forEach((sighting) => {
+      var row = tbody.append("tr");
+      Object.entries(sighting).forEach(([key, value]) => {
         var cell = row.append("td");
         cell.text(value);
-        });
-    });
+      });
+    })
+    }
 };
 
