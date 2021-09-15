@@ -5,15 +5,20 @@ var tableData = data;
 // Get a reference to the table body
 var tbody = d3.select("tbody");
 
-// Fill the table
-// Add data from each element in data across a row
-tableData.forEach((sighting) => {
-  var row = tbody.append("tr");
-  Object.entries(sighting).forEach(([key, value]) => {
-    var cell = row.append("td");
-    cell.text(value);
+// set up function to fill table
+function FillTable(sighting_data) {
+  // Add data from each element in data across a row
+  sighting_data.forEach((sighting) => {
+    var row = tbody.append("tr");
+    Object.entries(sighting).forEach(([key, value]) => {
+      var cell = row.append("td");
+      cell.text(value);
+    });
   });
-});
+}
+
+// Initial fill of the table
+FillTable(tableData);
 
 // Set up filtering of the table  
 // Select the button
@@ -101,14 +106,8 @@ function runEnter() {
   }
   else {
     // Fill the table with filtered data
-    // Add data from each element in data across a row
-    filteredData.forEach((sighting) => {
-      var row = tbody.append("tr");
-      Object.entries(sighting).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    })
+    FillTable(filteredData);
+
   }
 };
 
@@ -117,13 +116,5 @@ function runClear() {
   // clear out the previous table
   tbody.selectAll("tr").remove();
   // Fill the table
-  // Add data from each element in data across a row
-  tableData.forEach((sighting) => {
-    var row = tbody.append("tr");
-    Object.entries(sighting).forEach(([key, value]) => {
-      var cell = row.append("td");
-      cell.text(value);
-    });
-  });
-
+  FillTable(tableData);
 }
